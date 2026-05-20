@@ -89,6 +89,9 @@ CloudFormation Infrastructure Templates
 # 📂 Project Structure
 
 ```text
+# 📂 Project Structure
+
+```text
 pulsecheck-monitoring-service/
 │
 ├── .github/
@@ -100,11 +103,14 @@ pulsecheck-monitoring-service/
 │
 ├── screenshots/
 │
+├── tests/
+│   └── test_app.py
+│
 ├── app.py
 ├── requirements.txt
 ├── Dockerfile
 ├── README.md
-└── test_app.py
+└── .gitignore
 ```
 
 ---

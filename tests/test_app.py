@@ -16,5 +16,5 @@ def test_metrics():
     assert response.status_code == 200
 
 def test_github_check():
-    response = client.get('/check/github')
+    response = client.get('/github')
     assert response.status_code == 200

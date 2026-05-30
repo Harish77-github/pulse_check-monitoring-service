@@ -1,3 +1,4 @@
+```yaml id="4ch5p0"
 name: PulseCheck CI Pipeline
 
 on:
@@ -9,7 +10,13 @@ jobs:
   build-test-and-push:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ECR_REPOSITORY: pulsecheck
+      ECR_REGISTRY: 483162586756.dkr.ecr.ap-south-1.amazonaws.com
+
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -37,18 +44,29 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker image
+      - name: Generate Git Commit Hash
         run: |
-          docker build -t pulsecheck .
+          echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Tag Docker image
+      - name: Build Docker Image
         run: |
-          docker tag pulsecheck:latest 483162586756.dkr.ecr.ap-south-1.amazonaws.com/pulsecheck:latest
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
-      - name: Push Docker image to Amazon ECR
+      - name: Tag Docker Image
         run: |
-          docker push 483162586756.dkr.ecr.ap-south-1.amazonaws.com/pulsecheck:latest
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG \
+          $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Simulated deployment step
+      - name: Push Docker Image to Amazon ECR
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Display Image Version
+        run: |
+          echo "Docker image pushed successfully:"
+          echo "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Simulated Deployment Step
         run: |
           echo "Deployment simulation successful"
+```

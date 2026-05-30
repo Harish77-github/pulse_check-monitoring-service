@@ -1,4 +1,4 @@
-```yaml id="4ch5p0"
+```yaml
 name: PulseCheck CI Pipeline
 
 on:
@@ -54,8 +54,7 @@ jobs:
 
       - name: Tag Docker Image
         run: |
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG \
-          $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Push Docker Image to Amazon ECR
         run: |
